@@ -3,48 +3,38 @@ from sklearn.neighbors import KNeighborsClassifier
 import data_utils
 import metrics_utils
 import pipeline as pip
-from sklearn.metrics import accuracy_score, confusion_matrix
-from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import GridSearchCV
+import numpy as np
 
 data, labels = data_utils.load_data_set_from_arff('./database/OffComBR2.arff')
-possible_labels = data_utils.get_possible_labels(labels)
 yes_ratio = data_utils.get_yes_ratio(labels)
-print("\nDistribuição de classes:\n\t'yes': {:.3f}\n\t'no': {:.3f}\n".format(yes_ratio, 1 - yes_ratio))
+print("Distribuição de classes:\n\t'sim': {:.3f}\n\t'não': {:.3f}\n".format(yes_ratio, 1 - yes_ratio))
+
+data, X_test, labels, y_test = data_utils.split_test_train(data, labels, test_prop=0.2)
+
+#Its needed to add clf__ before parameter so the pipeline can interpret it
+naive_bayes_params = {"clf__alpha" : np.arange(0.1, 10.1, 0.25),
+                      "clf__fit_prior" : [True, False]}
 
 # [TODO] Declarar outros classificadores
-classifiers = {"Naive-Bayes" : MultinomialNB(),
-               "k-NN" : KNeighborsClassifier()}
+classifiers = {"Naive-Bayes" : {"classifier" : MultinomialNB(), "params" : naive_bayes_params}}
 
-# [TODO] Pensar em possíveis processamentos de dados
 
-for classifier_name, classifier in classifiers.items():
-    print("---------------------------------------- ")
+for classifier_name, classifier_data in classifiers.items():
     print(classifier_name)
 
     # Pipeline convert to a frequency-based bag of words and append classifier
-    pipeline = pip.get_pipeline(classifier)
+    pipeline = pip.get_pipeline(classifier_data['classifier'])
 
-    # [TODO] Tunar parâmetros utilizando dataset de test e validação - ex: crossfold
-    qty_cross_validations = 10
-    kf = KFold(n_splits = qty_cross_validations, shuffle=True)
-    # metrics_collections = {'accuracy': [],
-    #                        'confusion_matrix': []}
-    accuracy_collection = []
-    confusion_matrix_collection = []
+    # GridSearch do a cv-times Cross-Validation varying parameters and get the best one
+    clf = GridSearchCV(pipeline, classifier_data['params'], cv=10, n_jobs=-1, iid=True)
 
-    print("Usando {:d}-fold-cross-validation...".format(qty_cross_validations))
-    for train_index, test_index in kf.split(data):
-        X_train, X_test = data[train_index], data[test_index]
-        y_train, y_test = labels[train_index], labels[test_index]
-        pipeline.fit(X_train, y_train)
-        predicted = pipeline.predict(X_test)
+    clf.fit(data, labels)
 
-        # [TODO] Colocar mais medidas de qualidade, em especial as que lidam com datasets desbalanceados
-        accuracy_collection.append(accuracy_score(y_test, predicted))
-        confusion_matrix_collection.append(confusion_matrix(y_test, predicted, labels=possible_labels))
+    predicted = clf.predict(X_test)
 
-    accuracy_mean = metrics_utils.calculate_mean(accuracy_collection)
-    confusion_matrix_mean = metrics_utils.calculate_matrix_mean(confusion_matrix_collection)
-    print("Acurácia: {:.3f}".format(accuracy_mean), end="\n\n")
-    metrics_utils.print_confusion_matrix(confusion_matrix_mean, possible_labels)
-    print()
+    test_accuracy = accuracy_score(y_test, predicted)
+    print("Acurácia: {:.3f}".format(test_accuracy), end="\n\n")
+
+    # [TODO] Colocar mais medidas de qualidade, em especial as que lidam com datasets desbalanceados
