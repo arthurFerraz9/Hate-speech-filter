@@ -13,4 +13,5 @@ def split_test_train(data, labels, test_prop = 0.2):
 
    return train_test_split(data, labels, test_size = test_prop, random_state = 42)
 
-
+def get_yes_ratio(labels):
+    return labels.count('yes')/len(labels)
