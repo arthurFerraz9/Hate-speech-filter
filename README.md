@@ -6,19 +6,26 @@ We are using the database available at: https://github.com/rogersdepelle/OffComB
 
 ### Running on Linux:
 
-##### (1) Starting virtual enviroment:
+##### Start virtual enviroment:
   
   ``` source ./venv/bin/activate ``` 
   
-##### (2) Installing requirements:
+##### Installing requirements:
 
    ``` pip install -r requirements ```
 
-##### (3) Running:
+##### Running:
   ``` python main.py ```
   
  
 ### Running on Windows:
   
- ##### (1) Only step possible:
+ ##### Only step possible:
  Install linux and go to Running on Linux
+
+
+### Installing new packages
+
+Install new packages with virtual enviroment activated, then save then new configuration:
+ ``` pip freeze >> requirements ```
+
