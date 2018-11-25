@@ -15,3 +15,6 @@ def split_test_train(data, labels, test_prop = 0.2):
 def get_yes_ratio(labels):
     unique, counts = np.unique(labels, return_counts=True)
     return dict(zip(unique, counts))['yes']/len(labels)
+
+def get_possible_labels(labels):
+    return np.unique(labels)
