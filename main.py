@@ -4,6 +4,8 @@ import pipeline as pip
 from sklearn.metrics import accuracy_score
 
 data, labels = data_utils.load_data_set_from_arff('./database/OffComBR2.arff')
+yes_ratio = data_utils.get_yes_ratio(labels)
+print("Distribuição de classes: {:.3f}: 'sim', {:.3f}: 'não'".format(yes_ratio, 1 - yes_ratio))
 
 # Separate into train and test datasets maintaining proportion
 X_train, X_test, y_train, y_test = data_utils.split_test_train(data, labels, test_prop=0.2)
