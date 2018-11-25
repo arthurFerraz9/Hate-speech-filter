@@ -1,17 +1,19 @@
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.neighbors import KNeighborsClassifier
 import data_utils
 import pipeline as pip
 from sklearn.metrics import accuracy_score
 
 data, labels = data_utils.load_data_set_from_arff('./database/OffComBR2.arff')
 yes_ratio = data_utils.get_yes_ratio(labels)
-print("Distribuição de classes:\n\t'sim': {:.3f}\n\t'não': {:.3f}".format(yes_ratio, 1 - yes_ratio))
+print("Distribuição de classes:\n\t'sim': {:.3f}\n\t'não': {:.3f}\n".format(yes_ratio, 1 - yes_ratio))
 
 # Separate into train and test datasets maintaining proportion
 X_train, X_test, y_train, y_test = data_utils.split_test_train(data, labels, test_prop=0.2)
 
 # [TODO] Declarar outros classificadores
-classifiers = {"Naive-Bayes" : MultinomialNB()}
+classifiers = {"Naive-Bayes" : MultinomialNB(),
+               "k-NN" : KNeighborsClassifier()}
 
 # [TODO] Pensar em possíveis processamentos de dados
 
@@ -29,4 +31,4 @@ for classifier_name, classifier in classifiers.items():
 
     # [TODO] Colocar mais medidas de qualidade, em especial as que lidam com datasets desbalanceados
     test_accuracy = accuracy_score(y_test, predicted)
-    print(test_accuracy)
+    print("Acurácia: {:.3f}".format(test_accuracy), end="\n\n")
