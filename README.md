@@ -1,1 +1,1 @@
-# Hate-spech-filter
+# Hate-speech-filter
