@@ -17,8 +17,12 @@ data, X_test, labels, y_test = data_utils.split_test_train(data, labels, test_pr
 naive_bayes_params = {"clf__alpha" : np.arange(0.1, 10.1, 0.25),
                       "clf__fit_prior" : [True, False]}
 
-# [TODO] Declarar outros classificadores
-classifiers = {"Naive-Bayes" : {"classifier" : MultinomialNB(), "params" : naive_bayes_params}}
+knn_params = {"clf__n_neighbors" : np.arange(1,20,2),
+              "clf__metric" : ['cosine', 'euclidean', 'manhattan']}
+
+# [TODO] Declarar outros classificadores e seus parâmetros de variação
+classifiers = {"Naive-Bayes" : {"classifier" : MultinomialNB(), "params" : naive_bayes_params},
+               "kNN" : {"classifier" : KNeighborsClassifier(), "params" : knn_params}}
 
 
 for classifier_name, classifier_data in classifiers.items():
@@ -28,9 +32,10 @@ for classifier_name, classifier_data in classifiers.items():
     pipeline = pip.get_pipeline(classifier_data['classifier'])
 
     # GridSearch do a cv-times Cross-Validation varying parameters and get the best one
-    clf = GridSearchCV(pipeline, classifier_data['params'], cv=10, n_jobs=-1, iid=True)
+    clf = GridSearchCV(pipeline, classifier_data['params'], cv=10, n_jobs=-1, iid=True, scoring="balanced_accuracy")
 
     clf.fit(data, labels)
+    print("Melhor conjunto de parâmetros: ", clf.best_estimator_.steps[-1][1])
 
     predicted = clf.predict(X_test)
 
