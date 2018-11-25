@@ -4,21 +4,21 @@ This is project is designed to study text classification. Particularly we want t
 
 We are using the database available at: https://github.com/rogersdepelle/OffComBR
 
-# Running on Linux:
+### Running on Linux:
 
-## (1) Starting virtual enviroment:
+##### (1) Starting virtual enviroment:
   
   ``` source ./venv/bin/activate ``` 
   
-## (2) Installing requirements:
+##### (2) Installing requirements:
 
    ``` pip install -r requirements ```
 
-## (3) Running:
+##### (3) Running:
   ``` python main.py ```
   
  
-# Running on Windows:
+### Running on Windows:
   
- ## (1) Only step possible:
+ ##### (1) Only step possible:
  Install linux and go to Running on Linux
