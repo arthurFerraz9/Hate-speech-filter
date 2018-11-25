@@ -27,5 +27,6 @@ We are using the database available at: https://github.com/rogersdepelle/OffComB
 ### Installing new packages
 
 Install new packages with virtual enviroment activated, then save then new configuration:
+
  ``` pip freeze >> requirements ```
 
