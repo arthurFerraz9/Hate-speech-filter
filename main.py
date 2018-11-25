@@ -1,33 +1,30 @@
-import arff, numpy as np
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
+import data_utils
+import pipeline as pip
+from sklearn.metrics import accuracy_score
+
+data, labels = data_utils.load_data_set_from_arff('./database/OffComBR2.arff')
+
+# Separate into train and test datasets maintaining proportion
+X_train, X_test, y_train, y_test = data_utils.split_test_train(data, labels, test_prop=0.2)
+
+# [TODO] Declarar outros classificadores
+classifiers = {"Naive-Bayes" : MultinomialNB()}
+
+# [TODO] Pensar em possíveis processamentos de dados
+
+for classifier_name, classifier in classifiers.items():
+    print(classifier_name)
+
+    # Pipeline convert to a frequency-based bag of words and append classifier
+    pipeline = pip.get_pipeline(classifier)
 
 
-#[TODO] Loading Dataset - should separate Train, Validate and Train, for Now only using Train
+    # [TODO] Tunar parâmetros utilizando dataset de test e validação - ex: crossfold
+    # Importante: Não utilizar conjunto de teste para tunar parâmetros - somente utilizar teste para comparar modelos
+    pipeline.fit(X_train, y_train)
+    predicted = pipeline.predict(X_test)
 
-file = arff.load(open('./database/OffComBR2.arff', 'r'))
-
-dataset = np.array(file['data'])
-
-X = [data[1] for data in dataset]
-Y = [data[0] for data in dataset]
-
-
-# Define a Pipeline that:
-# vect -> turn text into Bag of Words
-# tfidf -> convert ocurrences to frequency
-# clf -> choose any classifier
-text_clf = Pipeline([
-     ('vect', CountVectorizer()),
-     ('tfidf', TfidfTransformer()),
-     ('clf', MultinomialNB()),
- ])
-
-text_clf.fit(X, Y)
-predicted = text_clf.predict(X)
-
-print(np.mean(predicted == Y))
-
-
-
+    # [TODO] Colocar mais medidas de qualidade, em especial as que lidam com datasets desbalanceados
+    test_accuracy = accuracy_score(y_test, predicted)
+    print(test_accuracy)
