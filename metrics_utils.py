@@ -17,11 +17,11 @@ def calculate_matrix_mean(matrix_collection):
     return sum_cm/len(matrix_collection)
 
 def print_confusion_matrix(cm, labels):
-    print("Matriz de confusão: ")
+    print("\nMatriz de confusão: ")
     print("\t\tV\tV")
     print("\t\t{}\t{}".format(labels[0], labels[1]))
     print("P\t{}\t{}\t{}".format(labels[0], cm.item(0), cm.item(1)))
-    print("P\t{}\t{}\t{}".format(labels[1], cm.item(2), cm.item(3)))
+    print("P\t{}\t{}\t{}\n".format(labels[1], cm.item(2), cm.item(3)))
 #
 # def plot_one(matrix,path = '.',nome = 'Matriz',save = False,show = True):
 # 		"""

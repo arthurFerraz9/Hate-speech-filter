@@ -7,7 +7,7 @@ from sklearn.svm import SVC
 import data_utils
 import metrics_utils
 import pipeline as pip
-from sklearn.metrics import*
+from sklearn.metrics import *
 from sklearn.model_selection import GridSearchCV
 import numpy as np
 
@@ -51,12 +51,19 @@ for classifier_name, classifier_data in classifiers.items():
 
 
     test_accuracy = accuracy_score(y_test, predicted)
-    print("Acurácia: {:.3f}\n".format(test_accuracy))
+    print("Acurácia: {:.3f}".format(test_accuracy))
+
     cm = confusion_matrix(y_test, predicted, labels=possible_labels)
     metrics_utils.print_confusion_matrix(cm, possible_labels)
-    # test_f1 = f1_score(y_test, predicted)
-    # print("F1: {:.3f}".format(test_f1))
-    # test_precision   = precision_score(y_test, predicted)
-    # print("precision: {:.3f}".format(test_precision))
+
+    test_precision   = precision_score(y_test, predicted, pos_label='yes')
+    print("Precision: {:.3f}".format(test_precision))
+
+    test_recall = recall_score(y_test, predicted, pos_label='yes')
+    print("Recall: {:.3f}".format(test_recall))
+
+    test_f1 = f1_score(y_test, predicted, pos_label='yes')
+    print("F1: {:.3f}\n".format(test_f1))
+
 
     # [TODO] Colocar mais medidas de qualidade, em especial as que lidam com datasets desbalanceados

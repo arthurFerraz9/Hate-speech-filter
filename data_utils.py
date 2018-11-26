@@ -18,4 +18,4 @@ def get_yes_ratio(labels):
     return dict(zip(unique, counts))['yes']/len(labels)
 
 def get_possible_labels(labels):
-    return np.unique(labels)
+    return np.unique(labels).tolist()
