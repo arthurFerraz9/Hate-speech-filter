@@ -6,6 +6,7 @@ def load_data_set_from_arff(filename):
     file = arff.load(open(filename, 'r'))
     dataset = file['data']
     x = np.array([data[1] for data in dataset])
+    # y = np.array(0 if data[0] == 'no' else  1 for data in dataset)
     y = np.array([data[0] for data in dataset])
     return x, y
 

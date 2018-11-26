@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
+
+
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
 import data_utils
 import metrics_utils
 import pipeline as pip
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import*
 from sklearn.model_selection import GridSearchCV
 import numpy as np
 
@@ -17,12 +21,16 @@ data, X_test, labels, y_test = data_utils.split_test_train(data, labels, test_pr
 naive_bayes_params = {"clf__alpha" : np.arange(0.1, 10.1, 0.25),
                       "clf__fit_prior" : [True, False]}
 
-knn_params = {"clf__n_neighbors" : np.arange(1,20,2),
+knn_params = {"clf__n_neighbors" : np.arange(5,11,2),
               "clf__metric" : ['cosine', 'euclidean', 'manhattan']}
+
+svm_param = { 'clf__kernel' : ['linear', 'poly', 'rbf', 'sigmoid'],
+              'clf__degree' : np.arange(3, 6, 1)}
 
 # [TODO] Declarar outros classificadores e seus parâmetros de variação
 classifiers = {"Naive-Bayes" : {"classifier" : MultinomialNB(), "params" : naive_bayes_params},
-               "kNN" : {"classifier" : KNeighborsClassifier(), "params" : knn_params}}
+               "kNN" : {"classifier" : KNeighborsClassifier(), "params" : knn_params},
+               'SVM' : {"classifier" : SVC(), "params" : svm_param}}
 
 
 for classifier_name, classifier_data in classifiers.items():
@@ -39,7 +47,12 @@ for classifier_name, classifier_data in classifiers.items():
 
     predicted = clf.predict(X_test)
 
+
     test_accuracy = accuracy_score(y_test, predicted)
-    print("Acurácia: {:.3f}".format(test_accuracy), end="\n\n")
+    print("Acurácia: {:.3f}".format(test_accuracy))
+    # test_f1 = f1_score(y_test, predicted)
+    # print("F1: {:.3f}".format(test_f1))
+    # test_precision   = precision_score(y_test, predicted)
+    # print("precision: {:.3f}".format(test_precision))
 
     # [TODO] Colocar mais medidas de qualidade, em especial as que lidam com datasets desbalanceados
