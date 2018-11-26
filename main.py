@@ -12,8 +12,9 @@ from sklearn.model_selection import GridSearchCV
 import numpy as np
 
 data, labels = data_utils.load_data_set_from_arff('./database/OffComBR2.arff')
+possible_labels = data_utils.get_possible_labels(labels)
 yes_ratio = data_utils.get_yes_ratio(labels)
-print("Distribuição de classes:\n\t'sim': {:.3f}\n\t'não': {:.3f}\n".format(yes_ratio, 1 - yes_ratio))
+print("Distribuição de classes:\n\t'yes': {:.3f}\n\t'no': {:.3f}\n".format(yes_ratio, 1 - yes_ratio))
 
 data, X_test, labels, y_test = data_utils.split_test_train(data, labels, test_prop=0.2)
 
@@ -50,7 +51,9 @@ for classifier_name, classifier_data in classifiers.items():
 
 
     test_accuracy = accuracy_score(y_test, predicted)
-    print("Acurácia: {:.3f}".format(test_accuracy))
+    print("Acurácia: {:.3f}\n".format(test_accuracy))
+    cm = confusion_matrix(y_test, predicted, labels=possible_labels)
+    metrics_utils.print_confusion_matrix(cm, possible_labels)
     # test_f1 = f1_score(y_test, predicted)
     # print("F1: {:.3f}".format(test_f1))
     # test_precision   = precision_score(y_test, predicted)
