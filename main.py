@@ -25,7 +25,8 @@ knn_params = {"clf__n_neighbors" : np.arange(5,11,2),
               "clf__metric" : ['cosine', 'euclidean', 'manhattan']}
 
 svm_param = { 'clf__kernel' : ['linear', 'poly', 'rbf', 'sigmoid'],
-              'clf__degree' : np.arange(3, 6, 1)}
+              'clf__degree' : np.arange(3, 6, 1),
+              'clf__gamma' : ['scale']}
 
 # [TODO] Declarar outros classificadores e seus parâmetros de variação
 classifiers = {"Naive-Bayes" : {"classifier" : MultinomialNB(), "params" : naive_bayes_params},
@@ -34,7 +35,7 @@ classifiers = {"Naive-Bayes" : {"classifier" : MultinomialNB(), "params" : naive
 
 
 for classifier_name, classifier_data in classifiers.items():
-    print(classifier_name)
+    print("-------------------------------\n{}\n".format(classifier_name))
 
     # Pipeline convert to a frequency-based bag of words and append classifier
     pipeline = pip.get_pipeline(classifier_data['classifier'])
@@ -43,7 +44,7 @@ for classifier_name, classifier_data in classifiers.items():
     clf = GridSearchCV(pipeline, classifier_data['params'], cv=10, n_jobs=-1, iid=True, scoring="balanced_accuracy")
 
     clf.fit(data, labels)
-    print("Melhor conjunto de parâmetros: ", clf.best_estimator_.steps[-1][1])
+    print("Melhor conjunto de parâmetros: {}\n".format(clf.best_estimator_.steps[-1][1]))
 
     predicted = clf.predict(X_test)
 
