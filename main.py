@@ -22,7 +22,7 @@ data, X_test, labels, y_test = data_utils.split_test_train(data, labels, test_pr
 naive_bayes_params = {"clf__alpha" : np.arange(0.1, 10.1, 0.25),
                       "clf__fit_prior" : [True, False]}
 
-knn_params = {"clf__n_neighbors" : np.arange(5,11,2),
+knn_params = {"clf__n_neighbors" : np.arange(1,20,2),
               "clf__metric" : ['cosine', 'euclidean', 'manhattan']}
 
 svm_param = { 'clf__kernel' : ['linear', 'poly', 'rbf', 'sigmoid'],
