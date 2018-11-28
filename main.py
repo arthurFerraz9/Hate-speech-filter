@@ -29,7 +29,6 @@ svm_param = { 'clf__kernel' : ['linear', 'poly', 'rbf', 'sigmoid'],
               'clf__degree' : np.arange(3, 6, 1),
               'clf__gamma' : ['scale']}
 
-# [TODO] Declarar outros classificadores e seus parâmetros de variação
 classifiers = {"Naive-Bayes" : {"classifier" : MultinomialNB(), "params" : naive_bayes_params},
                "kNN" : {"classifier" : KNeighborsClassifier(), "params" : knn_params},
                'SVM' : {"classifier" : SVC(), "params" : svm_param}}
@@ -66,4 +65,4 @@ for classifier_name, classifier_data in classifiers.items():
     print("F1: {:.3f}\n".format(test_f1))
 
 
-    # [TODO] Colocar mais medidas de qualidade, em especial as que lidam com datasets desbalanceados
+   
